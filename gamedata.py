@@ -57,11 +57,18 @@ def get_links(body):
 def get_screenshots(body):
     div = body.find('div', {'class':'entry-content'})   
     screenshots = []
+    game_pp = []
+    
+    images = body.findAll('img')
+    #game_pp.append(images[0])
+    
+    game_pp.append(images[0]["src"])
+    
     img = div.findAll('img')
     for screenshot in img:
         if ('riotpixel' in screenshot.get('src')):
             screenshots.append(screenshot.get('src'))
-    return screenshots
+    return (screenshots , game_pp)
 
 def game_data(body):
     #body = get_body(gameID)
@@ -71,8 +78,9 @@ def game_data(body):
     names = get_name(body)
     links = get_links(body)
     screenshots = get_screenshots(body)
-    game = {'id':names[2], 'name':names[0], 'version':names[1], 'date':names[3], 'originalSize':data[0], 'repackSize':data[1], 
-    'selective':data[2], 'mirrors':links, 'genres':data[3], 'companies':data[4], 'languages':data[5], 'screenshots':screenshots}
+    game_pp = get_screenshots(body)
+    game = { 'id':names[2], 'name':names[0], 'version':names[1], 'date':names[3], 'originalSize':data[0], 'repackSize':data[1], 
+    'selective':data[2], 'mirrors':links, 'genres':data[3], 'companies':data[4], 'languages':data[5], 'game_pp':game_pp[1] , 'screenshots':screenshots}
     return game
 
 #print(game_data("call-of-duty-black-ops-3"))
